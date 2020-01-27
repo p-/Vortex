@@ -46,7 +46,7 @@
 		<slf4j-api.version>1.7.29</slf4j-api.version>
 
 		<!-- Plugins -->
-		<asm.version>7.2</asm.version>
+		<asm.version>7.3.1</asm.version>
 		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
 		<lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
 		<maven-assembly-plugin.version>3.2.0</maven-assembly-plugin.version>
