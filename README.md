@@ -4,6 +4,7 @@
 [![...](https://www.travis-ci.com/agustin-golmar/Vortex.svg?branch=master)](https://www.travis-ci.com/agustin-golmar/Vortex)
 [![...](https://snyk.io/test/github/agustin-golmar/Vortex/badge.svg?targetFile=pom.xml)](https://snyk.io/test/github/agustin-golmar/Vortex?targetFile=pom.xml)
 [![...](https://img.shields.io/lgtm/alerts/g/agustin-golmar/Vortex.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/agustin-golmar/Vortex/alerts/)
+[![...](https://img.shields.io/lgtm/grade/java/g/agustin-golmar/Vortex.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/agustin-golmar/Vortex/context:java)
 [![...](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fagustin-golmar%2FVortex.svg?type=small)](https://app.fossa.com/projects/git%2Bgithub.com%2Fagustin-golmar%2FVortex?ref=badge_small)
 
 # Vortex
