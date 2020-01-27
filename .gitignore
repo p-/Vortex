@@ -1,0 +1,40 @@
+# --------------------------------------------------------------------------- #
+# Folders:
+#
+
+.idea/
+.settings/
+.vs/
+.vscode/
+bin/
+bower_components/
+infer-out/
+log/
+logs/
+node_modules/
+target/
+
+# --------------------------------------------------------------------------- #
+# Files:
+#
+
+*.csproj
+*.iml
+*.iws
+*.jar
+*.log
+*.sln
+*.war
+*_IS_UNDEFINED
+*~
+.DS_Store
+.classpath
+.factorypath
+.project
+dependency-reduced-pom.xml
+
+# --------------------------------------------------------------------------- #
+# Project Specific:
+#
+
+vortex.json

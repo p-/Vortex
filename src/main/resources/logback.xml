@@ -1,0 +1,14 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<configuration debug = "false" packagingData = "false">
+	<appender name = "default" class = "ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>[%date{dd/MM/yyyy HH:mm:ss.SSS, ${log.timezone:-America/Argentina/Buenos_Aires}}][%-5level][%logger] %msg%n</pattern>
+			<outputPatternAsHeader>false</outputPatternAsHeader>
+		</encoder>
+	</appender>
+	<root level = "${log.level:-INFO}">
+		<appender-ref ref = "default"/>
+	</root>
+	<logger name = "ar.nadezhda.vortex" additivity = "true"/>
+</configuration>

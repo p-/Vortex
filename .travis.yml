@@ -1,0 +1,28 @@
+# Container:
+cache:
+  directories:
+  - $HOME/infer
+  - $HOME/.m2
+env:
+  global:
+    - CODECOV_TOKEN="4ab0dfbd-66bb-45a7-9ada-051fa9f0feb0"
+    - INFER_HOME="$HOME/infer/bin"
+    - INFER_VERSION="0.17.0"
+    - LOG="-Dlog.level=DEBUG"
+    - MAVEN_PHASES="clean package"
+    - MAVEN_SETTINGS=".resource/plugin/maven-settings.xml"
+    - SCRIPTS_FOLDER="./.resource/script"
+git:
+  depth: false
+jdk:
+  - openjdk12
+language:
+  - java
+
+# Lifecycle:
+before_install:
+  - chmod ugo+x $SCRIPTS_FOLDER/infer.sh
+install:
+  - $SCRIPTS_FOLDER/infer.sh
+script:
+  - $INFER_HOME/infer run -- mvn -s $MAVEN_SETTINGS $LOG $MAVEN_PHASES

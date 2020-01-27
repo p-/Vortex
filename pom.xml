@@ -1,0 +1,237 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<project
+	xmlns = "https://maven.apache.org/pom/4.0.0"
+	xmlns:xsi = "https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation = "https://maven.apache.org/pom/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<!-- Artifact Specification -->
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>ar.nadezhda.vortex</groupId>
+	<artifactId>vortex</artifactId>
+	<version>0.0.0</version>
+	<packaging>jar</packaging>
+	<name>Vortex</name>
+	<url>https://github.com/agustin-golmar/Vortex</url>
+
+	<developers>
+		<developer>
+			<id>agustin-golmar</id>
+			<name>Agustín Golmar</name>
+			<email>mgolmar@itba.edu.ar</email>
+			<url>https://agustin-golmar.github.io/</url>
+			<roles>
+				<role>Author</role>
+			</roles>
+		</developer>
+	</developers>
+
+	<description>
+		Computational Fluid Dynamics (CFD), using FHP model (with cellular automatons), to solve the Navier-Stokes equation.
+	</description>
+
+	<!-- Properties -->
+	<properties>
+		<!-- Platform -->
+		<java.version>12</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<main.class>${project.groupId}.Main</main.class>
+		<final.name>${project.artifactId}</final.name>
+		<root.directory>${project.basedir}</root.directory>
+
+		<!-- Logging -->
+		<jcl-over-slf4j.version>1.7.29</jcl-over-slf4j.version>
+		<logback-classic.version>1.2.3</logback-classic.version>
+		<logback-core.version>1.2.3</logback-core.version>
+		<slf4j-api.version>1.7.29</slf4j-api.version>
+
+		<!-- Plugins -->
+		<asm.version>7.2</asm.version>
+		<exec-maven-plugin.version>1.6.0</exec-maven-plugin.version>
+		<lifecycle-mapping.version>1.0.0</lifecycle-mapping.version>
+		<maven-assembly-plugin.version>3.2.0</maven-assembly-plugin.version>
+		<maven-clean-plugin.version>3.1.0</maven-clean-plugin.version>
+		<maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+		<maven-eclipse-plugin.version>2.10</maven-eclipse-plugin.version>
+		<maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+		<maven-project-info-reports-plugin.version>3.0.0</maven-project-info-reports-plugin.version>
+		<maven-resources-plugin.version>3.1.0</maven-resources-plugin.version>
+		<maven-site-plugin.version>3.8.2</maven-site-plugin.version>
+		<maven-surefire-plugin.version>3.0.0-M3</maven-surefire-plugin.version>
+	</properties>
+
+	<!-- Dependencies -->
+	<dependencies>
+		<!-- Logging -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${jcl-over-slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback-classic.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback-core.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-api.version}</version>
+		</dependency>
+	</dependencies>
+
+	<!-- Build -->
+	<build>
+		<!-- Plugins -->
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>${exec-maven-plugin.version}</version>
+				<executions>
+					<execution>
+						<id>post-processing</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>java</executable>
+							<workingDirectory>${root.directory}</workingDirectory>
+							<arguments>
+								<argument>-version</argument>
+							</arguments>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven-assembly-plugin.version}</version>
+				<configuration>
+					<id>executable</id>
+					<attach>false</attach>
+					<encoding>UTF-8</encoding>
+					<appendAssemblyId>false</appendAssemblyId>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+						<manifestFile>${root.directory}/.resource/manifest/vortex-manifest.mf</manifestFile>
+					</archive>
+					<descriptors>
+						<descriptor>${root.directory}/.resource/plugin/vortex-assembly.xml</descriptor>
+					</descriptors>
+					<finalName>${final.name}</finalName>
+					<outputDirectory>${root.directory}</outputDirectory>
+				</configuration>
+				<executions>
+					<execution>
+						<id>executable</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>${maven-clean-plugin.version}</version>
+				<configuration>
+					<filesets>
+						<fileset>
+							<directory>${root.directory}</directory>
+							<includes>
+								<include>${final.name}.jar</include>
+							</includes>
+						</fileset>
+					</filesets>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-compiler-plugin.version}</version>
+				<configuration>
+					<compilerVersion>${java.version}</compilerVersion>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<release>${java.version}</release>
+					<jdkToolchain>
+						<version>${java.version}</version>
+					</jdkToolchain>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.ow2.asm</groupId>
+						<artifactId>asm</artifactId>
+						<version>${asm.version}</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
+				<version>${maven-eclipse-plugin.version}</version>
+				<configuration>
+					<downloadJavadocs>true</downloadJavadocs>
+					<downloadSources>true</downloadSources>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+				<configuration>
+					<archive>
+						<addMavenDescriptor>false</addMavenDescriptor>
+					</archive>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>${maven-project-info-reports-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-site-plugin</artifactId>
+				<version>${maven-site-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
+			</plugin>
+		</plugins>
+	</build>
+
+	<!-- Distributions -->
+	<distributionManagement>
+		<site>
+			<id>${project.artifactId}-site</id>
+			<url>${project.baseUri}</url>
+		</site>
+	</distributionManagement>
+</project>
