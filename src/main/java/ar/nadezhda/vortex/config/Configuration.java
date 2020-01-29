@@ -26,6 +26,9 @@ public final class Configuration {
 	/** Las dimensiones de la grilla. */
 	private int [] lattice;
 
+	/** El modo a ejecutar. */
+	private String mode;
+
 	/** El tipo de momento inyectado. */
 	private String momentum;
 
@@ -59,6 +62,7 @@ public final class Configuration {
 		this.contour = "non-periodic";
 		this.cuda = false;
 		this.lattice = new int [] {0, 0};
+		this.mode = "?";
 		this.momentum = "left-to-right";
 		this.output = "?";
 		this.ratio = 0.0;
@@ -73,7 +77,8 @@ public final class Configuration {
 	@Override
 	public String toString() {
 		return new StringBuilder(1024)
-			.append("\tshape           : '").append(getShape())
+			.append("\tmode            : '").append(getMode())
+			.append("'\n\tshape           : '").append(getShape())
 			.append("'\n\toutput          : '").append(getOutput())
 			.append("'\n\tlattice         : ").append(getLattice()[0]).append("x").append(getLattice()[1])
 			.append(" nodes\n\tsteps           : ").append(getSteps())
@@ -100,6 +105,10 @@ public final class Configuration {
 
 	public int [] getLattice() {
 		return lattice.clone();
+	}
+
+	public String getMode() {
+		return mode;
 	}
 
 	public String getMomentum() {

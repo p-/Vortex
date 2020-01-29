@@ -10,24 +10,24 @@ public enum Message {
 
 	APP_NAME
 		("(2020) Vortex."),
+	CANNOT_INSTANTIATE
+		("You shall not instantiate this class."),
 	CONFIG_FILE_NOT_FOUND
-		("No se encontró el archivo de configuración ('{}')."),
+		("Configuration file not found ('{}')."),
 	CONFIG_INVALID_FORMAT
-		("El archivo de configuración no está en formato JSON (ver línea {}, columna {})."),
+		("The configuration file is not a valid JSON (see line {}, column {})."),
 	CONFIG_UNRECOGNIZED_PROPERTY
-		("La configuración posee una propiedad desconocida ('{}'), en la línea {}, columna {}."),
-	CONFIG_UNKNOWN_ERROR
-		("Error desconocido al leer la configuración."),
-	USING_DEFAULT_CONFIG
-		("Usando configuración por defecto."),
-	UNKNOWN_MODE
-		("Modo desconocido ('{}'). Vea la documentación."),
-	UNSPECIFIED_MODE
-		("El modo no fue especificado."),
+		("The configuration has an unknown property ('{}'), at line {}, column {}."),
 	CONFIGURATION
-		("Configuración:\n{}"),
+		("Configuration:\n{}"),
 	FINISH_TIME
-		("Finalizado en {} segundos.");
+		("Finish in {}."),
+	UNKNOWN_ERROR
+		("Unknown exception of type: '{}'.\n\tThe error message is: '{}'.\n\tThe stacktrace is:"),
+	UNKNOWN_MODE
+		("Unknown mode (trying to find '{}'). See usage."),
+	UNSPECIFIED_MODE
+		("The mode wasn't specified.");
 
 	private final String message;
 

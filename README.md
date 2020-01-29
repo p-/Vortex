@@ -73,10 +73,6 @@ This project has been built, designed and maintained by:
 
 ## Bibliography
 
-__"Title"__. Author. _Metadata. Date_.
-
-__"Title"__. Author. _Access Date. [[https://github.com/agustin-golmar/Multitier]](https://github.com/agustin-golmar/Multitier)_
-
 __"Introduction To Practice Of Molecular Simulation"__. Akira Satoh. _Elsevier
 Inc. ISBN 978-0-12-385148-2. Akita Prefectural University, Japan. 2011_.
 
