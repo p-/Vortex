@@ -7,3 +7,6 @@ update_configs:
       - match:
           dependency_name: "javax.measure:unit-api"
           version_requirement: "2.0-PRD"
+      - match:
+          dependency_name: "javax.measure:unit-api"
+          version_requirement: "2.0-EDR"
