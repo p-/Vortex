@@ -12,6 +12,10 @@ public enum Message {
 		("(2020) Vortex."),
 	CANNOT_INSTANTIATE
 		("You shall not instantiate this class."),
+	CANNOT_TERMINATE_THREAD_POOL
+		("Cannot shutdown threads in the cluster."),
+	CLUSTER_INTERRUPTED
+		("The cluster was interrupted during his operation."),
 	CONFIG_FILE_NOT_FOUND
 		("Configuration file not found ('{}')."),
 	CONFIG_INVALID_FORMAT

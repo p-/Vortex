@@ -1,6 +1,8 @@
 package ar.nadezhda.vortex.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.io.IOException;
+import java.nio.file.Path;
 
 	/**
 	* <p>Configuración global.</p>
@@ -18,6 +20,9 @@ public final class Configuration {
 
 	/** La condición de contorno. */
 	private String contour;
+
+	/** La cantidad de threads a utilizar durante el procesamiento. */
+	private int cores;
 
 	/** Habilita el uso de CUDA para acelerar el procesamiento. */
 	@JsonProperty()
@@ -54,12 +59,10 @@ public final class Configuration {
 	/** La cantidad de pasos requeridos antes de computar alguna magnitud. */
 	private int window;
 
-	/** La cantidad de threads a utilizar durante el procesamiento. */
-	private int workers;
-
 	public Configuration() {
 		this.average = 1;
 		this.contour = "non-periodic";
+		this.cores = -1;
 		this.cuda = false;
 		this.lattice = new int [] {0, 0};
 		this.mode = "?";
@@ -71,7 +74,6 @@ public final class Configuration {
 		this.shape = "?";
 		this.steps = 0;
 		this.window = 1;
-		this.workers = -1;
 	}
 
 	@Override
@@ -80,7 +82,7 @@ public final class Configuration {
 			.append("\tmode            : '").append(getMode())
 			.append("'\n\tshape           : '").append(getShape())
 			.append("'\n\toutput          : '").append(getOutput())
-			.append("'\n\tlattice         : ").append(getLattice()[0]).append("x").append(getLattice()[1])
+			.append("'\n\tlattice         : ").append(getLatticeWidth()).append("x").append(getLatticeHeight())
 			.append(" nodes\n\tsteps           : ").append(getSteps())
 			.append("\n\twindow          : ").append(getWindow())
 			.append(" steps\n\taverage         : ").append(getAverage())
@@ -88,7 +90,7 @@ public final class Configuration {
 			.append("\n\tmomentum        : ").append(getMomentum())
 			.append("\n\tratio           : ").append(100.0 * getRatio())
 			.append(" %\n\tseed            : ").append(getSeed())
-			.append("\n\tworkers         : ").append(getWorkers())
+			.append("\n\tcores           : ").append(getCores())
 			.append("\n\n\tUse CUDA        : ").append(useCUDA())
 			.append("\n\tSave automaton? : ").append(saveAutomaton())
 			.append("\n")
@@ -103,8 +105,21 @@ public final class Configuration {
 		return contour;
 	}
 
+	public int getCores() {
+		final int cores = Runtime.getRuntime().availableProcessors();
+		return this.cores < 0 ? cores : this.cores;
+	}
+
 	public int [] getLattice() {
 		return lattice.clone();
+	}
+
+	public int getLatticeHeight() {
+		return lattice[1];
+	}
+
+	public int getLatticeWidth() {
+		return lattice[0];
 	}
 
 	public String getMode() {
@@ -116,7 +131,14 @@ public final class Configuration {
 	}
 
 	public String getOutput() {
-		return output;
+		try {
+			return Path.of(output)
+				.toRealPath()
+				.toString();
+		}
+		catch (final IOException exception) {
+			return "Non-existent! (" + output + ")";
+		}
 	}
 
 	public double getRatio() {
@@ -128,7 +150,14 @@ public final class Configuration {
 	}
 
 	public String getShape() {
-		return shape;
+		try {
+			return Path.of(shape)
+				.toRealPath()
+				.toString();
+		}
+		catch (final IOException exception) {
+			return "Non-existent! (" + shape + ")";
+		}
 	}
 
 	public int getSteps() {
@@ -137,11 +166,6 @@ public final class Configuration {
 
 	public int getWindow() {
 		return window;
-	}
-
-	public int getWorkers() {
-		final int cores = Runtime.getRuntime().availableProcessors();
-		return workers < 0 ? cores : workers;
 	}
 
 	public boolean saveAutomaton() {
