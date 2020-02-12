@@ -11,7 +11,7 @@ import ar.nadezhda.vortex.support.Message;
 public final class Mask {
 
 	public static final short MASS = 0x3F;
-	public static final short META = 0xC0;
+	public static final short META = 0x01C0;
 
 	public static final short A = 0x01;
 	public static final short B = 0x02;
@@ -22,6 +22,7 @@ public final class Mask {
 
 	public static final short SOLID = 0x40;
 	public static final short RANDOM = 0x80;
+	public static final short SINK = 0x0100;
 
 	private Mask() {
 		throw new AssertionError(Message.CANNOT_INSTANTIATE);

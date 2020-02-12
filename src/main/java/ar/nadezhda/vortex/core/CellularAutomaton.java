@@ -4,6 +4,8 @@ import ar.nadezhda.vortex.config.Scenario;
 import ar.nadezhda.vortex.interfaces.Cluster;
 import ar.nadezhda.vortex.interfaces.Geometry;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.math3.random.MersenneTwister;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +22,7 @@ public final class CellularAutomaton {
 
 	private final Cluster cluster;
 	private final int height;
+	private final short momentum;
 	private final MersenneTwister prng;
 	private final byte [] randomness;
 	private final Scenario scenario;
@@ -29,10 +32,13 @@ public final class CellularAutomaton {
 
 	private short [][] lattice0;
 	private short [][] lattice1;
+	private int [] xSources;
+	private int [] ySources;
 
 	private CellularAutomaton(final Builder builder) {
 		this.cluster = builder.cluster;
 		this.height = builder.height;
+		this.momentum = loadMomentum(builder.scenario.getMomentum());
 		this.prng = new MersenneTwister(builder.seed);
 		this.randomness = new byte [4 + builder.width * builder.height / 8];
 		this.scenario = builder.scenario;
@@ -42,14 +48,18 @@ public final class CellularAutomaton {
 		this.lattice0 = new short [builder.width][builder.height];
 		this.lattice1 = new short [builder.width][builder.height];
 		log.info("Loading scenario...");
+		loadSinks();
 		loadSolids();
+		loadSources();
 		log.info("Automaton ready.");
 	}
 
 	public void evolve() {
 		log.info("Evolving...");
+		final int rate = scenario.getRate();
 		for (int k = 0; k < steps; ++k) {
 			prng.nextBytes(randomness);
+			if (k % rate == 0) injectMomentum();
 			cluster.compute(this::collide);
 			cluster.compute(this::propagate);
 			swap();
@@ -62,10 +72,44 @@ public final class CellularAutomaton {
 		lattice0[x][y] = system[lattice0[x][y]];
 	}
 
+	private void injectMomentum() {
+		for (int k = 0; k < xSources.length; ++k) {
+			lattice0[xSources[k]][ySources[k]] |= momentum;
+		}
+	}
+
+	private void loadSinks() {
+		for (final Geometry geometry : scenario.getSink()) {
+			for (final Point point : geometry.points()) {
+				lattice0[point.x][point.y] |= Mask.SINK;
+			}
+		}
+	}
+
 	private void loadSolids() {
 		for (final Geometry geometry : scenario.getSolid()) {
 			for (final Point point : geometry.points()) {
 				lattice0[point.x][point.y] |= Mask.SOLID;
+			}
+		}
+	}
+
+	private void loadSources() {
+		final List<Point []> geometries = new ArrayList<>();
+		int size = 0;
+		for (final Geometry geometry : scenario.getSource()) {
+			final Point [] points = geometry.points();
+			geometries.add(points);
+			size += points.length;
+		}
+		xSources = new int [size];
+		ySources = new int [size];
+		int k = 0;
+		for (final Point [] geometry : geometries) {
+			for (int i = 0; i < geometry.length; ++i) {
+				xSources[k] = geometry[i].x;
+				ySources[k] = geometry[i].y;
+				++k;
 			}
 		}
 	}
@@ -81,7 +125,7 @@ public final class CellularAutomaton {
 		final int up = wrapOnHeight(y + 1);
 		lattice1[x][y] = (short) (
 			(nextBit(x, y)? 0 : Mask.RANDOM)
-			| (Mask.SOLID & lattice0[x][y])
+			| ((Mask.SINK | Mask.SOLID) & lattice0[x][y])
 			| (Mask.A & lattice0[left][y])
 			| (Mask.B & lattice0[left][down])
 			| (Mask.C & lattice0[x][down])
@@ -103,6 +147,22 @@ public final class CellularAutomaton {
 
 	private int wrapOnWidth(final int x) {
 		return x + width * ((x >>> 31) - (width - x - 1 >>> 31));
+	}
+
+	private static short loadMomentum(final String [] directions) {
+		short momentum = 0;
+		for (final String direction : directions) {
+			switch (direction) {
+				case "A": momentum |= Mask.A; break;
+				case "B": momentum |= Mask.B; break;
+				case "C": momentum |= Mask.C; break;
+				case "D": momentum |= Mask.D; break;
+				case "E": momentum |= Mask.E; break;
+				case "F": momentum |= Mask.F; break;
+				default: break;
+			}
+		}
+		return momentum;
 	}
 
 	public static final class Builder {

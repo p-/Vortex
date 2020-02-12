@@ -26,25 +26,77 @@ $ mvn clean package
 The configuration must be in a file named `vortex.json`, located in the root
 folder. It must contain the following properties:
 
+| Property        | Description                                                                                               |
+|:---------------:|-----------------------------------------------------------------------------------------------------------|
+| `mode`          | The operation to run. It should be `simulation` or `animation`. |
+| `output`        | The path to a folder where to put the generated files. |
+| `lattice`       | The dimensions of the lattice in the form _\[columns, rows\]_. |
+| `steps`         | The frames or steps to simulate. One frame implies a collision and propagation process. |
+| `window`        | How many frames are computed before generating a velocity vector field. |
+| `average`       | The size of the area taken for the velocity vector field. A value of _N_ implies an square area of _NxN_. |
+| `seed`          | The seed of the _Mersenne Twister_ PRNG. This make the whole simulation reproducible. |
+| `cores`         | How many cores or threads will be used for the simulation. A value of _-1_ creates one thread per core. |
+| `cuda`          | __Not implemented.__ |
+| `saveAutomaton` | __Not implemented.__ |
+| `scenario`      | The properties of the scenario to simulate. It has many additional properties. |
+| `bouncing`      | The type of reaction applied to a particle when hitting a solid node. Only supports the value `no-slip`. |
+| `momentum`      | A list of velocity directions. The injected momentum will have this directions when applied. |
+| `rate`          | The momentum will be injected every _rate_-frames. |
+| `ratio`         | The momentum will be applied to a particle with a _ratio_ probability. |
+| `sink`          | A list of geometries, where every geometry specifies a set of nodes that behave like sinkholes. |
+| `solid`         | A list of geometries that specifies the solid nodes. |
+| `source`        | A list of geometries that specifies the source of injected particles. |
+| `geometry`      | The type of geometry to create. Only supports `line` for now. |
+| `source`        | The coordinates of the starting node of the line. The line will include this node. |
+| `destination`   | The coordinates of the ending node of the line. The line will include this node. |
+
+This is a complete example of the configuration:
+
 ```
 {
-    "shape"         : "res/shape/barrier.shape",
-    "output"        : "res/data/output",
+    "mode"          : "simulation",
+    "output"        : ".resource/data/output",
 
-    "lattice"       : [1920, 1080],
-    "dimension"     : [1.0, 1.0],
-    "steps"         : 100000,
+    "lattice"       : [1920, 960],
+    "steps"         : "100000",
     "window"        : 100,
     "average"       : 32,
 
-    "contour"       : "non-periodic",
-    "momentum"      : "left-to-right",
-    "ratio"         : 0.1,
-
     "seed"          : 35265826342033,
-    "workers"       : 0,
+    "cores"         : 2,
     "cuda"          : false,
-    "saveAutomaton" : false
+    "saveAutomaton" : false,
+
+    "scenario"      : {
+        "bouncing"  : "no-slip",
+        "momentum"  : ["A", "B", "F"],
+        "rate"      : 4,
+        "ratio"     : 0.1,
+
+        "sink"      : [{
+            "geometry"      : "line",
+            "source"        : [0, 0],
+            "destination"   : [0, 959]
+        }, {
+            "geometry"      : "line",
+            "source"        : [1919, 0],
+            "destination"   : [1919, 959]
+        }],
+        "solid"     : [{
+            "geometry"      : "line",
+            "source"        : [0, 0],
+            "destination"   : [1919, 0]
+        }, {
+            "geometry"      : "line",
+            "source"        : [0, 959],
+            "destination"   : [1919, 959]
+        }],
+        "source"    : [{
+            "geometry"      : "line",
+            "source"        : [1, 0],
+            "destination"   : [1, 959]
+        }]
+    }
 }
 ```
 
@@ -56,10 +108,11 @@ In the root folder, just run:
 $ java -jar vortex.jar
 ```
 
-You can provide the following additional VM arguments:
+You can provide the following additional VM arguments (those prefixed with __-D__):
 
 * `log.level`: any level supported by _Logback_ (default is _INFO_).
 * `log.timezone`: any timezone supported by _Logback_ (default is _America/Argentina/Buenos\_Aires_).
+* `vortex.config`: a path to the configuration file that should be used instead of the default location.
 
 ## License
 

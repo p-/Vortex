@@ -15,8 +15,8 @@ public final class CollisionSystem {
 	}
 
 	public static short [] noSlipFHP_I() {
-		final short [] system = new short [256];
-		for (int k = 0; k < system.length; ++k) {
+		final short [] system = new short [512];
+		for (int k = 0; k < 256; ++k) {
 			// Solids and non-solids:
 			if ((k & Mask.SOLID) != 0) {
 				system[k] = (short) ((k & Mask.META) | (Mask.bounceAll(k)));
@@ -24,6 +24,10 @@ public final class CollisionSystem {
 			else {
 				system[k] = (short) k;
 			}
+		}
+		for (int k = 256; k < 512; ++k) {
+			// Sinkholes:
+			system[k] = Mask.SINK;
 		}
 		// 2-particle head-on collisions:
 		system[9] = Mask.B + Mask.E;

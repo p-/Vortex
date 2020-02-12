@@ -24,13 +24,15 @@ import org.slf4j.LoggerFactory;
 public final class Main {
 
 	private static final String CONFIGURATION_FILE = "vortex.json";
+	private static final String LOCATION = "vortex.config";
 	private static final Logger log = LoggerFactory.getLogger(Main.class);
 
 	public static void main(final String ... arguments) {
+		final String configLocation = System.getProperty(LOCATION, CONFIGURATION_FILE);
 		try {
 			final Timer timer = Timer.start();
 			log.info(Message.APP_NAME.toString());
-			final Configuration config = Configurator.load(CONFIGURATION_FILE);
+			final Configuration config = Configurator.load(configLocation);
 			log.info(Message.CONFIGURATION.toString(), config);
 			runMode(config);
 			log.info(Message.FINISH_TIME.toString(), timer.time(SECOND));
@@ -40,8 +42,7 @@ public final class Main {
 				exception.getLocalizedMessage());
 		}
 		catch (final FileNotFoundException exception) {
-			log.error(Message.CONFIG_FILE_NOT_FOUND.toString(),
-				CONFIGURATION_FILE);
+			log.error(Message.CONFIG_FILE_NOT_FOUND.toString(), configLocation);
 		}
 		catch (final InvalidFormatException | JsonParseException exception) {
 			final JsonLocation location = exception.getLocation();
