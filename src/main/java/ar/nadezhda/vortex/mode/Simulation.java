@@ -30,6 +30,7 @@ public final class Simulation implements Mode {
 				.width(config.getLatticeWidth())
 				.build())
 			.height(config.getLatticeHeight())
+			.scenario(config.getScenario())
 			.seed(config.getSeed())
 			.steps(config.getSteps())
 			.width(config.getLatticeWidth())
