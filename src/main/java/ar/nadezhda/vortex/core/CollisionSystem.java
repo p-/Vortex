@@ -1,5 +1,6 @@
 package ar.nadezhda.vortex.core;
 
+import static ar.nadezhda.vortex.core.Mask.*;
 import ar.nadezhda.vortex.support.Message;
 
 	/**
@@ -18,8 +19,8 @@ public final class CollisionSystem {
 		final short [] system = new short [512];
 		for (int k = 0; k < 256; ++k) {
 			// Solids and non-solids:
-			if ((k & Mask.SOLID) != 0) {
-				system[k] = (short) ((k & Mask.META) | (Mask.bounceAll(k)));
+			if ((k & SOLID) != 0) {
+				system[k] = (short) ((k & META) | (bounceAll(k)));
 			}
 			else {
 				system[k] = (short) k;
@@ -27,27 +28,27 @@ public final class CollisionSystem {
 		}
 		for (int k = 256; k < 512; ++k) {
 			// Sinkholes:
-			system[k] = Mask.SINK;
+			system[k] = SINK;
 		}
 		// 2-particle head-on collisions:
-		system[9] = Mask.B + Mask.E;
-		system[18] = Mask.C + Mask.F;
-		system[36] = Mask.A + Mask.D;
-		system[137] = Mask.C + Mask.F + Mask.RANDOM;
-		system[146] = Mask.A + Mask.D + Mask.RANDOM;
-		system[164] = Mask.B + Mask.E + Mask.RANDOM;
+		system[A + D] = B + E;
+		system[B + E] = C + F;
+		system[C + F] = A + D;
+		system[A + D + RANDOM] = C + F + RANDOM;
+		system[B + E + RANDOM] = A + D + RANDOM;
+		system[C + F + RANDOM] = B + E + RANDOM;
 		// symmetric 3-particle collisions:
-		system[21] = Mask.B + Mask.D + Mask.F;
-		system[42] = Mask.A + Mask.C + Mask.E;
-		system[149] = Mask.B + Mask.D + Mask.F + Mask.RANDOM;
-		system[170] = Mask.A + Mask.C + Mask.E + Mask.RANDOM;
+		system[A + C + E] = B + D + F;
+		system[B + D + F] = A + C + E;
+		system[A + C + E + RANDOM] = B + D + F + RANDOM;
+		system[B + D + F + RANDOM] = A + C + E + RANDOM;
 		// 4-particle head-on collisions:
-		system[27] = Mask.B + Mask.C + Mask.E + Mask.F;
-		system[45] = Mask.A + Mask.B + Mask.D + Mask.E;
-		system[54] = Mask.A + Mask.C + Mask.D + Mask.F;
-		system[155] = Mask.A + Mask.C + Mask.D + Mask.F + Mask.RANDOM;
-		system[173] = Mask.B + Mask.C + Mask.E + Mask.F + Mask.RANDOM;
-		system[182] = Mask.A + Mask.B + Mask.D + Mask.E + Mask.RANDOM;
+		system[A + B + D + E] = B + C + E + F;
+		system[A + C + D + F] = A + B + D + E;
+		system[B + C + E + F] = A + C + D + F;
+		system[A + B + D + E + RANDOM] = A + C + D + F + RANDOM;
+		system[A + C + D + F + RANDOM] = B + C + E + F + RANDOM;
+		system[B + C + E + F + RANDOM] = A + B + D + E + RANDOM;
 		return system;
 	}
 }

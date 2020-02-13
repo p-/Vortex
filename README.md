@@ -75,12 +75,12 @@ This is a complete example of the configuration:
 
         "sink"      : [{
             "geometry"      : "line",
-            "source"        : [0, 0],
-            "destination"   : [0, 959]
+            "source"        : [0, 1],
+            "destination"   : [0, 958]
         }, {
             "geometry"      : "line",
-            "source"        : [1919, 0],
-            "destination"   : [1919, 959]
+            "source"        : [1919, 1],
+            "destination"   : [1919, 958]
         }],
         "solid"     : [{
             "geometry"      : "line",
@@ -93,8 +93,8 @@ This is a complete example of the configuration:
         }],
         "source"    : [{
             "geometry"      : "line",
-            "source"        : [1, 0],
-            "destination"   : [1, 959]
+            "source"        : [1, 1],
+            "destination"   : [1, 958]
         }]
     }
 }
