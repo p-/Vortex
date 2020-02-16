@@ -24,6 +24,21 @@ public final class Mask {
 	public static final short RANDOM = 0x80;
 	public static final short SINK = 0x0100;
 
+	public static final double SQRT_3_2 = 0.5 * Math.sqrt(3.0);
+
+	public static final double Ax = 1.0;
+	public static final double Ay = 0.0;
+	public static final double Bx = 0.5;
+	public static final double By = SQRT_3_2;
+	public static final double Cx = -0.5;
+	public static final double Cy = SQRT_3_2;
+	public static final double Dx = -1.0;
+	public static final double Dy = 0.0;
+	public static final double Ex = -0.5;
+	public static final double Ey = -SQRT_3_2;
+	public static final double Fx = 0.5;
+	public static final double Fy = SQRT_3_2;
+
 	private Mask() {
 		throw new AssertionError(Message.CANNOT_INSTANTIATE);
 	}
@@ -56,7 +71,6 @@ public final class Mask {
 	}
 
 	public static double speed(final int direction) {
-		final double SQRT_3_2 = 0.5 * Math.sqrt(3.0);
 		double speedX = 0.0;
 		double speedY = 0.0;
 		if ((direction & A) != 0) {

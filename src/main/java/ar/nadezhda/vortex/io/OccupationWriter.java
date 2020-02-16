@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 	* @author Agustín Golmar
 	*/
 
-public final class OccupationWriter {
+public final class OccupationWriter implements AutoCloseable {
 
 	private static final Logger log = LoggerFactory.getLogger(OccupationWriter.class);
 
@@ -28,6 +28,16 @@ public final class OccupationWriter {
 		this.file = new DataOutputStream(
 			new BufferedOutputStream(
 				new FileOutputStream(this.output), 100*60*30*6*4));
+	}
+
+	@Override
+	public void close() {
+		try {
+			file.close();
+		}
+		catch (final IOException exception) {
+			log.error("Cannot close the file '{}'.", output);
+		}
 	}
 
 	/**
@@ -48,15 +58,6 @@ public final class OccupationWriter {
 					file.writeInt(occupation[w][h][v]);
 				}
 			}
-		}
-	}
-
-	public void close() {
-		try {
-			file.close();
-		}
-		catch (final IOException exception) {
-			log.error("Cannot close the file '{}'.", output);
 		}
 	}
 }

@@ -75,8 +75,8 @@ public final class CellularAutomaton {
 	public void evolve() throws IOException {
 		log.info("Evolving...");
 		final int rate = scenario.getRate();
-		final float threshold = steps /
-			((steps < 1000)? ((steps < 100)? 10 : 100) : 1000);
+		final double order = Math.pow(10, Math.max(Math.log10(steps) - 2, 1));
+		final int threshold = (int) (steps / (steps < order? 1 : order));
 		for (int k = 0; k < steps; ++k) {
 			prng.nextBytes(randomness);
 			if (k % rate == 0) {
