@@ -6,6 +6,7 @@ import ar.nadezhda.vortex.core.CellularAutomaton;
 import ar.nadezhda.vortex.core.ThreadedCluster;
 import ar.nadezhda.vortex.interfaces.Mode;
 import ar.nadezhda.vortex.support.Timer;
+import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,19 +24,27 @@ public final class Simulation implements Mode {
 	public void run(final Configuration config) {
 		log.info("Simulating...");
 		final Timer timer = Timer.start();
-		new CellularAutomaton.Builder()
-			.cluster(new ThreadedCluster.Builder()
-				.cores(config.getCores())
+		try {
+			new CellularAutomaton.Builder()
+				.average(config.getAverage())
+				.cluster(new ThreadedCluster.Builder()
+					.cores(config.getCores())
+					.height(config.getLatticeHeight())
+					.width(config.getLatticeWidth())
+					.build())
 				.height(config.getLatticeHeight())
+				.output(config.getOutput())
+				.scenario(config.getScenario())
+				.seed(config.getSeed())
+				.steps(config.getSteps())
 				.width(config.getLatticeWidth())
-				.build())
-			.height(config.getLatticeHeight())
-			.scenario(config.getScenario())
-			.seed(config.getSeed())
-			.steps(config.getSteps())
-			.width(config.getLatticeWidth())
-			.build()
-			.evolve();
+				.window(config.getWindow())
+				.build()
+				.evolve();
+		}
+		catch (final IOException exception) {
+			log.error("Cannot save the occupation state to a file.");
+		}
 		log.info("Simulation ended in {}.", timer.time(SECOND));
 	}
 }

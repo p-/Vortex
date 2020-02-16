@@ -55,7 +55,7 @@ This is a complete example of the configuration:
 ```
 {
     "mode"          : "simulation",
-    "output"        : ".resource/data/output",
+    "output"        : ".resource/data/output/",
 
     "lattice"       : [1920, 960],
     "steps"         : "100000",
@@ -63,7 +63,7 @@ This is a complete example of the configuration:
     "average"       : 32,
 
     "seed"          : 35265826342033,
-    "cores"         : 2,
+    "cores"         : -1,
     "cuda"          : false,
     "saveAutomaton" : false,
 
