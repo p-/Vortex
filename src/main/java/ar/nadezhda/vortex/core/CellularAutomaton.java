@@ -33,7 +33,7 @@ public final class CellularAutomaton {
 	private final OccupationWriter occupationFile;
 	private final MersenneTwister prng;
 	private final byte [] randomness;
-	private final int ratio;
+	private final byte ratio;
 	private final Scenario scenario;
 	private final int steps;
 	private final short [] system;
@@ -55,8 +55,8 @@ public final class CellularAutomaton {
 		this.occupation = new int [builder.width/builder.average][builder.height/builder.average][6];
 		this.occupationFile = new OccupationWriter(builder.output);
 		this.prng = new MersenneTwister(builder.seed);
-		this.randomness = new byte [4 + builder.width * builder.height / 8];
-		this.ratio = (int) (0xFFFFFFFFL * builder.scenario.getRatio() - 2147483648L);
+		this.randomness = new byte [builder.width * builder.height];
+		this.ratio = (byte) (0x7F * builder.scenario.getRatio());
 		this.scenario = builder.scenario;
 		this.steps = builder.steps;
 		this.system = CollisionSystem.noSlipFHP_I();
@@ -74,6 +74,11 @@ public final class CellularAutomaton {
 
 	public void evolve() throws IOException {
 		log.info("Evolving...");
+		final Cluster single = new ThreadedCluster.Builder()
+			.cores(1)
+			.height(height)
+			.width(width)
+			.build();
 		final int rate = scenario.getRate();
 		final double order = Math.pow(10, Math.max(Math.log10(steps) - 2, 1));
 		final int threshold = (int) (steps / (steps < order? 1 : order));
@@ -86,7 +91,7 @@ public final class CellularAutomaton {
 			cluster.compute(this::collide);
 			cluster.compute(this::propagate);
 			swap();
-			cluster.compute(this::occupation);
+			single.compute(this::occupation);
 			if (k % threshold == 0) {
 				log.info("{}% completed.", 100.0f*k/steps);
 			}
@@ -98,6 +103,7 @@ public final class CellularAutomaton {
 		occupationFile.saveSample(occupation);
 		log.info("Releasing cluster and resources...");
 		cluster.release();
+		single.release();
 		occupationFile.close();
 	}
 
@@ -122,7 +128,9 @@ public final class CellularAutomaton {
 	}
 
 	private void momentum(final int x, final int y) {
-		if (prng.nextInt() < ratio) {
+		final boolean inject = (randomness[x * height + y] & 0x7F) < ratio;
+		if (inject) {
+			// No se sabe el orden de ejecución del lattice y por lo tanto nextInt no se ejecuta como es previsto!
 			lattice0[x][y] = momentum[lattice0[x][y]];
 		}
 	}
