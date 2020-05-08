@@ -130,7 +130,6 @@ public final class CellularAutomaton {
 	private void momentum(final int x, final int y) {
 		final boolean inject = (randomness[x * height + y] & 0x7F) < ratio;
 		if (inject) {
-			// No se sabe el orden de ejecución del lattice y por lo tanto nextInt no se ejecuta como es previsto!
 			lattice0[x][y] = momentum[lattice0[x][y]];
 		}
 	}
@@ -138,7 +137,7 @@ public final class CellularAutomaton {
 	private void loadParticles() {
 		for (int w = 0; w < width; ++w) {
 			for (int h = 0; h < height; ++h) {
-				lattice0[w][h] = (short) prng.nextInt(64);
+				lattice0[w][h] = (short) (prng.nextInt() & (MASS | RANDOM));
 			}
 		}
 	}
