@@ -44,7 +44,7 @@
 		<commons-math3.version>3.6.1</commons-math3.version>
 		<indriya.version>2.1.2</indriya.version>
 		<jackson-annotations.version>2.12.2</jackson-annotations.version>
-		<jackson-core.version>2.12.1</jackson-core.version>
+		<jackson-core.version>2.12.2</jackson-core.version>
 		<jackson-databind.version>2.10.2</jackson-databind.version>
 		<unit-api.version>2.1.2</unit-api.version>
 
