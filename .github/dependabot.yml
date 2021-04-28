@@ -1,0 +1,17 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: weekly
+    day: sunday
+    time: "06:00"
+    timezone: America/Buenos_Aires
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: javax.measure:unit-api
+    versions:
+    - 2.0-EDR
+  - dependency-name: javax.measure:unit-api
+    versions:
+    - 2.0-PRD
