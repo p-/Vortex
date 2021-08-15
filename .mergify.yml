@@ -3,11 +3,11 @@ pull_request_rules:
     conditions:
       - base=master
       - author=dependabot-preview[bot]
-      - "status-success=LGTM analysis: Java"
-      - status-success=License Compliance
-      - status-success=Travis CI - Branch
-      - status-success=Travis CI - Pull Request
-      - status-success=security/snyk (agustin-golmar)
+      #- "status-success=LGTM analysis: Java"
+      #- status-success=License Compliance
+      #- status-success=Travis CI - Branch
+      #- status-success=Travis CI - Pull Request
+      #- status-success=security/snyk (agustin-golmar)
     actions:
       merge:
         method: merge
