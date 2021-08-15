@@ -1,5 +1,5 @@
 pull_request_rules:
-  - name: Automatic merge for Dependabot dependency updates
+  - name: Automatic merge-rule for Dependabot.
     conditions:
       - base=master
       - author=dependabot-preview[bot]
